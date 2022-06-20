@@ -93,7 +93,7 @@ def cnn_train():
 
 
 def locate(img, unet):
-    img = cv2.resize(img, [512, 512])
+    img = cv2.resize(img, (512, 512))
     img_copy = img.copy()
     img = img.reshape(1, 512, 512, 3)
     predict = unet.predict(img)
@@ -116,21 +116,21 @@ def locate(img, unet):
             final_img[:, :, 0], cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     x, y, w, h = cv2.boundingRect(contours[0])
     img_cut = img_copy[y:y+h, x:x+w]
-    img_cut = cv2.resize(img_cut, [240, 80])
+    img_cut = cv2.resize(img_cut, (240, 80))
 
     cv2.drawContours(img_copy, [contours[0]], 0, (0, 0, 255), 2)
     # return img_cut, img_copy, predict
-    return img_cut,img_copy
+    return img_cut, img_copy
 
 
 if __name__ == '__main__':
     # cnn = models.load_model('cnn.h5')
     unet = models.load_model('locate.h5')
     img = cv2.imread('xxx.jpg')
-    img_cut, img, predict = locate(img, unet)
+    img_cut, img = locate(img, unet)
     cv2.imshow('ori', img)
     cv2.imshow('cut plate', img_cut)
-    cv2.imshow('predict bin', predict)
+    # cv2.imshow('predict bin', predict)
     cv2.waitKey()
     cv2.destroyAllWindows()
     # print(cnn_predict(cnn, img_cut))
