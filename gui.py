@@ -31,6 +31,7 @@ class car_recog_gui(QMainWindow):
         self.unet = models.load_model('weights/locate.h5')
         self.cnn = models.load_model('weights/cnn.h5')
         self.device = select_device('0')
+        self.text = ''
         self.yolo = DetectMultiBackend('weights/yolo.pt',
                                        device=self.device,
                                        data=ROOT / 'scripts/CCPD.yaml')
@@ -51,8 +52,23 @@ class car_recog_gui(QMainWindow):
         ori_pic_widget = QWidget()
         ori_pic_widget.setLayout(ori_pic_layout)
 
+        dialog_label = QLabel()
+        dialog_label.setText('log:')
+        self.dialog = QTextEdit()
+        self.dialog.setReadOnly(True)
+        self.dialog.setMinimumHeight(600)
+        self.dialog.setMaximumWidth(240)
+        dialog_layout = QVBoxLayout()
+        dialog_layout.addWidget(dialog_label)
+        dialog_layout.addWidget(self.dialog)
+        dialog_layout.addStretch(1)
+        dialog_widget = QWidget()
+        dialog_widget.setLayout(dialog_layout)
+
         main_layout.addWidget(ori_pic_widget)
         main_layout.addStretch(1)
+        main_layout.addWidget(dialog_widget)
+
         main_layout.addWidget(self.create_right_widget())
 
         main_widget = QWidget()
@@ -74,8 +90,8 @@ class car_recog_gui(QMainWindow):
         self.result_label.setText('识别结果:')
         self.result_text = QTextEdit()
         self.result_text.setReadOnly(True)
-        self.result_text.setMaximumHeight(50)
-        self.result_text.setMaximumWidth(200)
+        self.result_text.setMaximumHeight(80)
+        self.result_text.setMaximumWidth(240)
         result_layout = QVBoxLayout()
         result_layout.addWidget(self.result_label)
         result_layout.addWidget(self.result_text)
@@ -84,7 +100,6 @@ class car_recog_gui(QMainWindow):
 
         right_layout.addWidget(cut_pic_widget)
         right_layout.addWidget(result_widget)
-
         right_layout.addStretch(2)
 
         right_layout.addWidget(self.create_button())
@@ -147,7 +162,6 @@ class car_recog_gui(QMainWindow):
             QPixmap(qImg).scaled(240, 80, Qt.KeepAspectRatio))
         self.ori_pic.setPixmap(QPixmap(qImg2).scaled(373, 600))
         result = cnn_predict(self.cnn, img_cut)
-        print(result[1])
         self.result = result[1]
 
     def locate_img(self):
@@ -160,7 +174,9 @@ class car_recog_gui(QMainWindow):
             img_cut, img_label = detect(img, self.yolo, self.device)
             self.predict_img(img_cut, img_label)
         end = time.time()
-        self.result_text.setText(self.result + '\n' + str(end - start)+'s')
+        self.text += self.result + '\t  ' + str('%.2f' % (end - start)) + 's\n'
+        self.dialog.setText(self.text)
+        self.result_text.setText(self.result + '\n' + str(end - start) + 's')
 
     def open_img(self):
         path, _ = QFileDialog.getOpenFileName(
@@ -193,6 +209,7 @@ class car_recog_gui(QMainWindow):
         return plate
 
     def pred_all(self):
+        self.text = ''
         path = QFileDialog.getExistingDirectory(self, "choose folder", "./")
 
         if path:
@@ -214,11 +231,14 @@ class car_recog_gui(QMainWindow):
                         self.locate_img()
                         if self.result == label:
                             count += 1
+                            print(label + ' √')
+                        else:
+                            print(self.result + ' ×')
                 end = time.time()
                 result = count / num_of_test
                 self.result_text.setText(
                     str(count) + '/' + str(num_of_test) + ', ' + str(result) +
-                    '\n' + str(end - start)+'s')
+                    '\n' + str(end - start) + 's')
 
     def open_img_yolo(self):
         path, _ = QFileDialog.getOpenFileName(
