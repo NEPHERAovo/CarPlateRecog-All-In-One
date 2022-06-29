@@ -234,6 +234,7 @@ class car_recog_gui(QMainWindow):
                             print(label + ' √')
                         else:
                             print(self.result + ' ×')
+                        QApplication.processEvents()
                 end = time.time()
                 result = count / num_of_test
                 self.result_text.setText(
