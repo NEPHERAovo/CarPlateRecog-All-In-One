@@ -1,3 +1,9 @@
+'''
+created on 06/24/2022
+author: 钟余盛
+description: 车牌分割矫正函数
+'''
+
 # coding=utf-8
 import cv2
 import numpy as np

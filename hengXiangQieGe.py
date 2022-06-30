@@ -1,3 +1,9 @@
+'''
+created on 06/25/2022
+author: 钟余盛
+description: 车牌横向竖向切割函数
+'''
+
 import cv2
 import numpy as np
 

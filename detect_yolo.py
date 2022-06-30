@@ -1,5 +1,5 @@
 '''
-created on 06/26/2020
+created on 06/26/2022
 author: 杨宇轩
 description: yolo定位，传入图片，返回预测结果和切割结果
 '''

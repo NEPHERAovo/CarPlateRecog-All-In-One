@@ -1,3 +1,9 @@
+'''
+created on 6/28/2022
+author: 钟余盛
+description: 调用神经网络实现字符识别
+'''
+
 import numpy as np
 import torch
 import numpy

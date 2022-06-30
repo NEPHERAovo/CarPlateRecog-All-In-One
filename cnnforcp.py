@@ -1,3 +1,9 @@
+'''
+created on 06/18/2022
+author: 钟余盛
+description: 训练单个字符的神经网络的卷积层
+'''
+
 import torch.nn as nn
 
 class chepai_CNN(nn.Module):

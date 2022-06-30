@@ -1,3 +1,8 @@
+'''
+created on 06/25/2022
+author: 钟余盛
+description: 以定位车牌的切割测试
+'''
 import os
 import imghdr
 import cv2

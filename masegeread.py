@@ -1,3 +1,9 @@
+'''
+created on 06/18/2022
+author: 钟余盛
+description: 训练单个字符的神经网络
+'''
+
 import torch
 import torch.nn as nn
 import torch.optim as optim

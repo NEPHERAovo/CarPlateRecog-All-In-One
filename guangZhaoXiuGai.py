@@ -1,4 +1,8 @@
-
+'''
+created on 06/24/2022
+author: 钟余盛
+description: 车牌预处理光照修改函数
+'''
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt

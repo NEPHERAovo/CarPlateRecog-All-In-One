@@ -1,3 +1,9 @@
+'''
+created on 06/26/2022
+author: 钟余盛
+description: 用于车牌切割单字符的函数
+'''
+
 import os
 import imghdr
 import cv2
