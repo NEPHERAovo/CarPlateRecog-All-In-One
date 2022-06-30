@@ -196,6 +196,7 @@ class car_recog_gui(QMainWindow):
         return button_widget
 
     def predict_img(self, img_cut, img_label):
+        self.delete_split_result()
         height, width, _ = img_cut.shape
         bytesPerLine = 3 * width
         qImg = QImage(img_cut.data.tobytes(), width, height, bytesPerLine,
@@ -299,6 +300,15 @@ class car_recog_gui(QMainWindow):
 
         # result = cnn_predict(self.cnn, img_cut)
         # self.result = "result[1]"
+
+    def delete_split_result(self):
+        self.d_pic1.setPixmap(QPixmap(""))
+        self.d_pic2.setPixmap(QPixmap(""))
+        self.d_pic3.setPixmap(QPixmap(""))
+        self.d_pic4.setPixmap(QPixmap(""))
+        self.d_pic5.setPixmap(QPixmap(""))
+        self.d_pic6.setPixmap(QPixmap(""))
+        self.d_pic7.setPixmap(QPixmap(""))
 
     def locate_img(self):
         start = time.time()
