@@ -16,8 +16,8 @@ num_epoches = 5
 data_tf = transforms.Compose([transforms.ToTensor(), transforms.Normalize([0.5], [0.5]), transforms.Grayscale(num_output_channels=1)])
 
 #下载训练集MNIST手写数字训练集
-train_dataset = datasets.ImageFolder('dataset/nuwchepai/',  transform=data_tf)
-test_dataset  = datasets.ImageFolder('dataset/nuwchepai/',  transform=data_tf)
+train_dataset = datasets.ImageFolder('D:\matlab\license_plate_system/bptest\dataset/nuwchepai/',  transform=data_tf)
+test_dataset  = datasets.ImageFolder('D:\matlab\license_plate_system/bptest\dataset/nuwchepai/',  transform=data_tf)
 train_loader  = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_loader   = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
@@ -67,12 +67,12 @@ for epoch in range(num_epoches):
     #输出阶段训练结果
     print('*'*10)
     print('epoch: {}, train loss: {:.4f}, train acc: {:.4f}'.format(epoch+1, train_loss, train_acc))
-torch.save(model, 'cpmodel.pkl')   #保存训练好的网络为pkl文件
+torch.save(model, 'weights/cpmodelnew.pkl')   #保存训练好的网络为pkl文件
 
 
-'''
+
 #测试数据
-model.load_state_dict(s)
+#model.load_state_dict()
 model.eval() #让model变为测试模式，网络会沿用batch normalization的值，但不使用drop out
 eval_loss = 0
 eval_acc = 0
@@ -92,7 +92,7 @@ with torch.no_grad():
         num_correct = (pred==label).sum()
         eval_acc += num_correct.data
 print('Test Loss: {:.6f}, Acc: {:.6f}'.format(eval_loss.cpu().numpy()/(len(test_dataset)), eval_acc.cpu().numpy()/(len(test_dataset))))
-'''
+
 
 '''
 from torchvision import transforms as T
