@@ -1,3 +1,9 @@
+'''
+created on 06/23/2020
+author: 杨宇轩
+description: yolov5数据集处理
+'''
+
 import cv2
 import os
 
@@ -33,16 +39,20 @@ def txt_translate(path, txt_path):
         txtfile = txt_path + txtname[0] + ".txt"
 
         with open(txtfile, "w") as f:
-            f.write(str(0) + " " + str(cx) + " " + str(cy) +
-                    " " + str(width) + " " + str(height))
+            f.write(
+                str(0) + " " + str(cx) + " " + str(cy) + " " + str(width) +
+                " " + str(height))
 
 
 if __name__ == '__main__':
     # det图片存储地址
     trainDir = "D:\Softwares\Python\CarPlateRecog-All-In-One\datasets\YOLOv5Locate\images/train/"
     validDir = "D:\Softwares\Python\CarPlateRecog-All-In-One\datasets\YOLOv5Locate\images/val/"
+    testDir = "D:\Softwares\Python\CarPlateRecog-All-In-One\datasets\YOLOv5Locate\images/test/"
     # det txt存储地址
     train_txt_path = "D:\Softwares\Python\CarPlateRecog-All-In-One\datasets\YOLOv5Locate\labels/train/"
     val_txt_path = "D:\Softwares\Python\CarPlateRecog-All-In-One\datasets\YOLOv5Locate\labels/val/"
+    test_txt_path = "D:\Softwares\Python\CarPlateRecog-All-In-One\datasets\YOLOv5Locate\labels/test/"
     txt_translate(trainDir, train_txt_path)
     txt_translate(validDir, val_txt_path)
+    txt_translate(testDir, test_txt_path)

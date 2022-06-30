@@ -1,30 +1,95 @@
+'''
+created on 06/20/2020
+author: 杨宇轩
+description: cnn识别/训练/测试
+'''
+
 import os
 import cv2
 import keras
 import numpy as np
 from keras import layers, models
 
-# 训练集路径
-PATH_TRAIN_DIR = 'D:\Softwares\Python\croppedTEST/'
-# 测试集路径
-PATH_TEST_DIR = 'D:\Softwares\Python\croppedTEST/'
 # 字符字典，读入时用
-characters_dict = {"京": 0, "沪": 1, "津": 2, "渝": 3, "冀": 4, "晋": 5, "蒙": 6, "辽": 7, "吉": 8, "黑": 9, "苏": 10,
-                   "浙": 11, "皖": 12, "闽": 13, "赣": 14, "鲁": 15, "豫": 16, "鄂": 17, "湘": 18, "粤": 19, "桂": 20,
-                   "琼": 21, "川": 22, "贵": 23, "云": 24, "藏": 25, "陕": 26, "甘": 27, "青": 28, "宁": 29, "新": 30,
-                   "0": 31, "1": 32, "2": 33, "3": 34, "4": 35, "5": 36, "6": 37, "7": 38, "8": 39, "9": 40,
-                   "A": 41, "B": 42, "C": 43, "D": 44, "E": 45, "F": 46, "G": 47, "H": 48, "J": 49, "K": 50,
-                   "L": 51, "M": 52, "N": 53, "P": 54, "Q": 55, "R": 56, "S": 57, "T": 58, "U": 59, "V": 60,
-                   "W": 61, "X": 62, "Y": 63, "Z": 64}
+characters_dict = {
+    "京": 0,
+    "沪": 1,
+    "津": 2,
+    "渝": 3,
+    "冀": 4,
+    "晋": 5,
+    "蒙": 6,
+    "辽": 7,
+    "吉": 8,
+    "黑": 9,
+    "苏": 10,
+    "浙": 11,
+    "皖": 12,
+    "闽": 13,
+    "赣": 14,
+    "鲁": 15,
+    "豫": 16,
+    "鄂": 17,
+    "湘": 18,
+    "粤": 19,
+    "桂": 20,
+    "琼": 21,
+    "川": 22,
+    "贵": 23,
+    "云": 24,
+    "藏": 25,
+    "陕": 26,
+    "甘": 27,
+    "青": 28,
+    "宁": 29,
+    "新": 30,
+    "0": 31,
+    "1": 32,
+    "2": 33,
+    "3": 34,
+    "4": 35,
+    "5": 36,
+    "6": 37,
+    "7": 38,
+    "8": 39,
+    "9": 40,
+    "A": 41,
+    "B": 42,
+    "C": 43,
+    "D": 44,
+    "E": 45,
+    "F": 46,
+    "G": 47,
+    "H": 48,
+    "J": 49,
+    "K": 50,
+    "L": 51,
+    "M": 52,
+    "N": 53,
+    "P": 54,
+    "Q": 55,
+    "R": 56,
+    "S": 57,
+    "T": 58,
+    "U": 59,
+    "V": 60,
+    "W": 61,
+    "X": 62,
+    "Y": 63,
+    "Z": 64
+}
 # 字符，预测时读取正确车牌用
-characters = ["京", "沪", "津", "渝", "冀", "晋", "蒙", "辽", "吉", "黑", "苏", "浙", "皖", "闽", "赣", "鲁", "豫",
-              "鄂", "湘", "粤", "桂", "琼", "川", "贵", "云", "藏", "陕", "甘", "青", "宁", "新", "0", "1", "2",
-              "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M",
-              "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+characters = [
+    "京", "沪", "津", "渝", "冀", "晋", "蒙", "辽", "吉", "黑", "苏", "浙", "皖", "闽", "赣",
+    "鲁", "豫", "鄂", "湘", "粤", "桂", "琼", "川", "贵", "云", "藏", "陕", "甘", "青", "宁",
+    "新", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D",
+    "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U",
+    "V", "W", "X", "Y", "Z"
+]
 
 
 # 测试神经网络
-def cnn_test():
+def cnn_test(PATH_TEST_DIR='D:\Softwares\Python\croppedTEST/'):
     # 初始化计数
     acc = 0
     fal = 0
@@ -36,34 +101,34 @@ def cnn_test():
     # 遍历路径下所有文件
     for i in range(n):
         # 读取图片
-        pic = cv2.imdecode(np.fromfile(
-            PATH_TEST_DIR + picName[i], dtype=np.uint8), -1)
+        pic = cv2.imdecode(
+            np.fromfile(PATH_TEST_DIR + picName[i], dtype=np.uint8), -1)
         # 读取字符
         label = [characters_dict[char] for char in picName[i][0:7]]
         # 读入正确结果
         predict = ''
         for j in range(0, 7):
-            predict = predict+characters[label[j]]
+            predict = predict + characters[label[j]]
         # 得到预测结果
         res = cnn_predict(cnn, pic)
-        print('predict:'+res[1]+'     answer:'+predict, end='')
+        print('predict:' + res[1] + '     answer:' + predict, end='')
         # 如果正确
         if res[1] == predict:
-            acc = acc+1
+            acc = acc + 1
             print('   √')
         else:
-            fal = fal+1
+            fal = fal + 1
             print('   ×')
         if res[1][2:] == predict[2:]:
             withoutChn = withoutChn + 1
     # 显示测试结果
     print("acc = %d , fal = %d, acc without province = %d" %
           (acc, fal, withoutChn))
-    print("accuracy = %lf" % (acc/i))
-    print("accuracy without province = %lf" % (withoutChn/i))
+    print("accuracy = %lf" % (acc / i))
+    print("accuracy without province = %lf" % (withoutChn / i))
 
 
-def cnn_train():
+def cnn_train(PATH_TRAIN_DIR='D:\Softwares\Python\croppedTEST/'):
 
     # 读入训练集
     picName = os.listdir(PATH_TRAIN_DIR)
@@ -76,8 +141,8 @@ def cnn_train():
         elif i % 5000 == 0:
             print("已读取%d张图片" % i)
         # 文件名包含中文，使用imdecode的方式以uint8打开，flags = -1表示打开源文件
-        pic = cv2.imdecode(np.fromfile(
-            PATH_TRAIN_DIR + picName[i], dtype=np.uint8), -1)
+        pic = cv2.imdecode(
+            np.fromfile(PATH_TRAIN_DIR + picName[i], dtype=np.uint8), -1)
         # label存入字符在characters_dict中对应的数字
         label = [characters_dict[char] for char in picName[i][0:7]]
         x_train.append(pic)
@@ -114,17 +179,20 @@ def cnn_train():
     x = layers.Dropout(0.2)(x)
 
     # 7个全连接层，每个对应65个字符， 总loss = loss1 + ... + loss7
-    outputLayer = [layers.Dense(65, activation='softmax', name='c%d' % (
-        i + 1))(x) for i in range(7)]
+    outputLayer = [
+        layers.Dense(65, activation='softmax', name='c%d' % (i + 1))(x)
+        for i in range(7)
+    ]
 
     model = models.Model(inputs=inputLayer, outputs=outputLayer)
     # 输出各层参数
     model.summary()
     # 配置训练模型
-    model.compile(optimizer='adam',
-                  # 多分类交叉熵损失函数，数字类label
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
+    model.compile(
+        optimizer='adam',
+        # 多分类交叉熵损失函数，数字类label
+        loss='sparse_categorical_crossentropy',
+        metrics=['accuracy'])
 
     # 训练
     print("start training")

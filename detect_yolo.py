@@ -1,3 +1,9 @@
+'''
+created on 06/26/2020
+author: 杨宇轩
+description: yolo定位，传入图片，返回预测结果和切割结果
+'''
+
 import os
 import sys
 from pathlib import Path
@@ -72,9 +78,7 @@ def detect(img, model, device):
                     'position': xywh
                 })
     if len(detections) == 0:
-        path = "D:\computer_vision\CarPlateRecog-All-In-One\\aaT\\wwww.jpg"
-        cv2.imwrite(path, img)
-        #raise Exception('dinWeiChuoWu')
+        raise Exception('locate error')
     img_cut = img[xywh[1]:xywh[1] + xywh[3], xywh[0]:xywh[0] + xywh[2]]
     img_cut = cv2.resize(img_cut, (240, 80))
     img_label = cv2.rectangle(img, (xywh[0], xywh[1]),

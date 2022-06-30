@@ -1,3 +1,9 @@
+'''
+created on 06/20/2020
+author: 杨宇轩，钟余盛
+description: 界面，包含各种识别方式
+'''
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -12,7 +18,6 @@ import cv2
 import time
 import qieGeHanShu as qgHS
 import ZhiFuShiBie as ZF
-import matplotlib.pyplot as plt
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
@@ -49,6 +54,7 @@ class car_recog_gui(QMainWindow):
         ori_pic_label = QLabel()
         ori_pic_label.setText('原图:')
         self.ori_pic = QLabel()
+        self.ori_pic.setFixedSize(373, 600)
         ori_pic_layout.addWidget(ori_pic_label)
         ori_pic_layout.addWidget(self.ori_pic)
         ori_pic_layout.addStretch(1)
@@ -85,6 +91,7 @@ class car_recog_gui(QMainWindow):
         cut_pic_label = QLabel()
         cut_pic_label.setText('车牌区域:')
         self.cut_pic = QLabel()
+        self.cut_pic.setFixedSize(240, 80)
         cut_pic_layout.addWidget(cut_pic_label)
         cut_pic_layout.addWidget(self.cut_pic)
         cut_pic_widget = QWidget()
@@ -193,14 +200,14 @@ class car_recog_gui(QMainWindow):
         bytesPerLine = 3 * width
         qImg = QImage(img_cut.data.tobytes(), width, height, bytesPerLine,
                       QImage.Format_BGR888)
+        self.cut_pic.setPixmap(QPixmap(qImg).scaled(240, 80))
 
         height, width, _ = img_label.shape
         bytesPerLine = 3 * width
         qImg2 = QImage(img_label.data.tobytes(), width, height, bytesPerLine,
                        QImage.Format_BGR888)
-        self.cut_pic.setPixmap(
-            QPixmap(qImg).scaled(240, 80, Qt.KeepAspectRatio))
         self.ori_pic.setPixmap(QPixmap(qImg2).scaled(373, 600))
+
         result = cnn_predict(self.cnn, img_cut)
         self.result = result[1]
 
@@ -226,16 +233,14 @@ class car_recog_gui(QMainWindow):
 
         if len(qiegechepai) == 7:
             height, width = qiegechepai[0].shape
-            qImg3 = QImage(qiegechepai[0].data.tobytes(), width, height,width,
-                            QImage.Format_Grayscale8)
-            self.d_pic1.setPixmap(
-                QPixmap(qImg3).scaled(32, 48))
+            qImg3 = QImage(qiegechepai[0].data.tobytes(), width, height, width,
+                           QImage.Format_Grayscale8)
+            self.d_pic1.setPixmap(QPixmap(qImg3).scaled(32, 48))
             Qimg3 = qiegechepai[0]
             a = ZF.danGeZiFuShiBie(Qimg3)
 
-
             height, width = qiegechepai[1].shape
-            qImg4 = QImage(qiegechepai[1].data.tobytes(), width, height,width,
+            qImg4 = QImage(qiegechepai[1].data.tobytes(), width, height, width,
                            QImage.Format_Grayscale8)
             self.d_pic2.setPixmap(
                 QPixmap(qImg4).scaled(32, 48, Qt.KeepAspectRatio))
@@ -243,7 +248,7 @@ class car_recog_gui(QMainWindow):
             b = ZF.danGeZiFuShiBie(Qimg4)
 
             height, width = qiegechepai[2].shape
-            qImg5 = QImage(qiegechepai[2].data.tobytes(), width, height,width,
+            qImg5 = QImage(qiegechepai[2].data.tobytes(), width, height, width,
                            QImage.Format_Grayscale8)
             self.d_pic3.setPixmap(
                 QPixmap(qImg5).scaled(32, 48, Qt.KeepAspectRatio))
@@ -251,7 +256,7 @@ class car_recog_gui(QMainWindow):
             c = ZF.danGeZiFuShiBie(Qimg5)
 
             height, width = qiegechepai[3].shape
-            qImg6 = QImage(qiegechepai[3].data.tobytes(), width, height,width,
+            qImg6 = QImage(qiegechepai[3].data.tobytes(), width, height, width,
                            QImage.Format_Grayscale8)
             self.d_pic4.setPixmap(
                 QPixmap(qImg6).scaled(32, 48, Qt.KeepAspectRatio))
@@ -259,7 +264,7 @@ class car_recog_gui(QMainWindow):
             d = ZF.danGeZiFuShiBie(Qimg6)
 
             height, width = qiegechepai[4].shape
-            qImg7 = QImage(qiegechepai[4].data.tobytes(), width, height,width,
+            qImg7 = QImage(qiegechepai[4].data.tobytes(), width, height, width,
                            QImage.Format_Grayscale8)
             self.d_pic5.setPixmap(
                 QPixmap(qImg7).scaled(32, 48, Qt.KeepAspectRatio))
@@ -267,7 +272,7 @@ class car_recog_gui(QMainWindow):
             e = ZF.danGeZiFuShiBie(Qimg7)
 
             height, width = qiegechepai[5].shape
-            qImg8 = QImage(qiegechepai[5].data.tobytes(), width, height,width,
+            qImg8 = QImage(qiegechepai[5].data.tobytes(), width, height, width,
                            QImage.Format_Grayscale8)
             self.d_pic6.setPixmap(
                 QPixmap(qImg8).scaled(32, 48, Qt.KeepAspectRatio))
@@ -275,14 +280,15 @@ class car_recog_gui(QMainWindow):
             f = ZF.danGeZiFuShiBie(Qimg8)
 
             height, width = qiegechepai[6].shape
-            qImg9 = QImage(qiegechepai[6].data.tobytes(), width, height,width,
+            qImg9 = QImage(qiegechepai[6].data.tobytes(), width, height, width,
                            QImage.Format_Grayscale8)
             self.d_pic7.setPixmap(
                 QPixmap(qImg9).scaled(32, 48, Qt.KeepAspectRatio))
             Qimg9 = qiegechepai[6]
             g = ZF.danGeZiFuShiBie(Qimg9)
 
-            self.result = str(a)+str(b)+str(c)+str(d)+str(e)+str(f)+str(g)
+            self.result = str(a) + str(b) + str(c) + str(d) + str(e) + str(
+                f) + str(g)
             saveimg = cv2.imread(self.path)
             #savepath = 'D:\computer_vision\CarPlateRecog-All-In-One\\basetupian\\' +
             #cv2.imwrite(saveimg,r'D:\computer_vision\CarPlateRecog-All-In-One\basetupian')
@@ -297,19 +303,30 @@ class car_recog_gui(QMainWindow):
     def locate_img(self):
         start = time.time()
         img = cv2.imread(self.path)
-        if self.way == 'unet':
-            img_cut, img_label = locate(img, self.unet)
-            self.predict_img(img_cut, img_label)
-        elif self.way == 'shoudong':
-            img_cut, img_label = detect(img, self.yolo, self.device)
-            self.predict_img2(img_cut, img_label)
-        else:
-            img_cut, img_label = detect(img, self.yolo, self.device)
-            self.predict_img(img_cut, img_label)
-        end = time.time()
-        self.text += self.result + '\t  ' + str('%.2f' % (end - start)) + 's\n'
-        self.dialog.setText(self.text)
-        self.result_text.setText(self.result + '\n' + str(end - start) + 's')
+        try:
+            if self.way == 'unet':
+                img_cut, img_label = locate(img, self.unet)
+                self.predict_img(img_cut, img_label)
+            elif self.way == 'shoudong':
+                img_cut, img_label = detect(img, self.yolo, self.device)
+                self.predict_img2(img_cut, img_label)
+            else:
+                img_cut, img_label = detect(img, self.yolo, self.device)
+                self.predict_img(img_cut, img_label)
+            end = time.time()
+            self.text += self.result + '\t  ' + str('%.2f' %
+                                                    (end - start)) + 's\n'
+            self.dialog.setText(self.text)
+            self.result_text.setText(self.result + '\n' + str(end - start) +
+                                     's')
+        except Exception as e:
+            msg = QMessageBox(QMessageBox.Critical, '错误', '定位失败')
+            msg.exec_()
+            height, width, _ = img.shape
+            bytesPerLine = 3 * width
+            qImg = QImage(img.data.tobytes(), width, height, bytesPerLine,
+                          QImage.Format_BGR888)
+            self.ori_pic.setPixmap(QPixmap(qImg).scaled(373, 600))
 
     def open_img(self):
         path, _ = QFileDialog.getOpenFileName(
@@ -346,7 +363,7 @@ class car_recog_gui(QMainWindow):
         path = QFileDialog.getExistingDirectory(self, "choose folder", "./")
 
         if path:
-            items = ["unet", "yolo",]
+            items = ["unet", "yolo"]
             value, ok = QInputDialog.getItem(self, "choose way", "请选择定位方式:",
                                              items, 1, True)
             if ok:
@@ -365,9 +382,20 @@ class car_recog_gui(QMainWindow):
                         if self.result == label:
                             count += 1
                             print(label + ' √')
+                            self.result_text.setText(
+                                self.result_text.toPlainText() + '\n√')
+                            self.text = self.text[:-1]
+                            self.text += ' √\n'
+                            self.dialog.setText(self.text)
                         else:
                             print(self.result + ' ×')
-                        QApplication.processEvents()
+                            self.result_text.setText(
+                                self.result_text.toPlainText() + '\n×')
+                            self.text = self.text[:-1]
+                            self.text += ' ×\n'
+                            self.dialog.setText(self.text)
+                        if num_of_test != 1:
+                            QApplication.processEvents()
                 end = time.time()
                 result = count / num_of_test
                 self.result_text.setText(
@@ -454,6 +482,7 @@ class car_recog_gui(QMainWindow):
         except:
             msg = QMessageBox(QMessageBox.Critical, '错误', '未读入图片')
             msg.exec_()
+
     def danzhangqiege(self):
         path, _ = QFileDialog.getOpenFileName(
             self, "open file", "", "ALL FILES (*.*);;PHOTO FILES (*.jpg)")
@@ -462,6 +491,7 @@ class car_recog_gui(QMainWindow):
             self.path = path
             self.way = 'shoudong'
             self.locate_img()
+
 
 if __name__ == "__main__":
     app = QApplication([])
