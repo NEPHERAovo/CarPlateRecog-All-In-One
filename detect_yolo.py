@@ -71,6 +71,10 @@ def detect(img, model, device):
                     'conf': conf,
                     'position': xywh
                 })
+    if len(detections) == 0:
+        path = "D:\computer_vision\CarPlateRecog-All-In-One\\aaT\\wwww.jpg"
+        cv2.imwrite(path, img)
+        #raise Exception('dinWeiChuoWu')
     img_cut = img[xywh[1]:xywh[1] + xywh[3], xywh[0]:xywh[0] + xywh[2]]
     img_cut = cv2.resize(img_cut, (240, 80))
     img_label = cv2.rectangle(img, (xywh[0], xywh[1]),
