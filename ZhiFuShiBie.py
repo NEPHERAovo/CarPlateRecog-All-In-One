@@ -32,7 +32,8 @@ data_tf = transforms.Compose(
 #state_dict = torch.load('cpmodel.pth')
 #model = cnnforcp.chepai_CNN(1)
 #model.load_state_dict(state_dict)
-model = torch.load('weights/cpmodel.pkl')  #加载训练好的网络
+#model = torch.load('cpmodelnew.pkl')  #加载训练好的网络
+model = torch.load('weights/cpmodelnew.pkl')  #加载训练好的网络
 
 if torch.cuda.is_available():
     model = model.cuda()
